@@ -49,9 +49,12 @@
   - Progress, voice and speed autosaved.
 - OCR fallback for scanned pages (Tesseract.js, in browser, cached per page).
 - Server-side audio cache so re-listening never pays twice.
+- "Open a PDF from this device" mode (`/read/local`): no account, nothing uploaded.
+- Mock voice mode in development when no Azure key is set.
 
 ### Later
-- Skip headers/footers/page numbers/citations heuristics toggle.
+- Skip headers/footers/page numbers/citations heuristics toggle (v1 reads running
+  headers and page numbers aloud).
 - Bookmarks & notes, export highlights.
 - Download as MP3.
 - Multi-language voices + auto language detection.
@@ -111,7 +114,7 @@
   └─ progress autosave ───────────────────────────────────────────────────────────────────▶ Supabase DB (documents)
 ```
 
-**Stack:** Next.js 15 (App Router, TypeScript), Tailwind CSS, `pdfjs-dist`,
+**Stack:** Next.js 16 (App Router, TypeScript), Tailwind CSS, `pdfjs-dist`,
 `microsoft-cognitiveservices-speech-sdk` (server only), `@supabase/ssr`,
 `tesseract.js`, `tus-js-client`, `zustand`. Tests: Vitest + Playwright.
 Hosting: Vercel (or any Node host).

@@ -1,0 +1,107 @@
+@import "tailwindcss";
+
+:root {
+  --hl-sentence: rgb(254 236 140);
+  --hl-word: rgb(251 176 64);
+}
+
+html,
+body {
+  background: #f5f5f5;
+  color: #171717;
+}
+
+/* ── PDF page + pdf.js text layer (subset of pdfjs-dist/web/pdf_viewer.css) ── */
+.pdf-page {
+  --user-unit: 1;
+  --total-scale-factor: calc(var(--scale-factor) * var(--user-unit));
+  --scale-round-x: 1px;
+  --scale-round-y: 1px;
+  contain: layout paint;
+}
+
+.pdf-page canvas {
+  z-index: 0;
+}
+
+/* The layer is its own stacking context, so blend the whole layer with the
+   canvas: text under a highlight stays crisp black instead of tinted. */
+.hl-layer {
+  z-index: 1;
+  mix-blend-mode: multiply;
+}
+
+.hl-sentence,
+.hl-word {
+  border-radius: 3px;
+  transition:
+    left 60ms linear,
+    top 60ms linear,
+    width 60ms linear;
+}
+
+.hl-sentence {
+  background: var(--hl-sentence);
+}
+
+.hl-word {
+  background: var(--hl-word);
+}
+
+.textLayer {
+  position: absolute;
+  text-align: initial;
+  inset: 0;
+  overflow: clip;
+  opacity: 1;
+  line-height: 1;
+  text-size-adjust: none;
+  forced-color-adjust: none;
+  transform-origin: 0 0;
+  caret-color: CanvasText;
+  z-index: 2;
+  cursor: pointer;
+
+  :is(span, br) {
+    color: transparent;
+    position: absolute;
+    white-space: pre;
+    cursor: pointer;
+    transform-origin: 0% 0%;
+  }
+
+  --min-font-size: 1;
+  --text-scale-factor: calc(var(--total-scale-factor) * var(--min-font-size));
+  --min-font-size-inv: calc(1 / var(--min-font-size));
+
+  > :not(.markedContent),
+  .markedContent span:not(.markedContent) {
+    z-index: 1;
+    --font-height: 0;
+    font-size: calc(var(--text-scale-factor) * var(--font-height));
+    --scale-x: 1;
+    --rotate: 0deg;
+    transform: rotate(var(--rotate)) scaleX(var(--scale-x)) scale(var(--min-font-size-inv));
+  }
+
+  .markedContent {
+    display: contents;
+  }
+
+  ::selection {
+    background: rgb(124 58 237 / 0.25);
+  }
+
+  br::selection {
+    background: transparent;
+  }
+
+  .endOfContent {
+    display: block;
+    position: absolute;
+    inset: 100% 0 0;
+    z-index: 0;
+    cursor: default;
+    user-select: none;
+  }
+}

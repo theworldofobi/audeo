@@ -1,0 +1,15 @@
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+next-env.d.ts
+.env*.local
+.env
+.vercel
+
+# copied from node_modules by scripts/copy-assets.mjs
+public/pdfjs/
+public/tesseract/
+
+e2e/out/
+e2e/fixtures/*.pdf
